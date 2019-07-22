@@ -6,21 +6,21 @@
     "precompile": "rimraf app/**/*.js test/**/*.js",
     "compile": "tsc",
     "pretest": "rimraf app/**/*.js test/**/*.js",
-    "test": "nyc mocha"
+    "test": "mocha --opts ./test/mocha.opts"
   },
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@types/chai": "~3.5.2",
-    "@types/mocha": "~2.2.41",
-    "@types/node": "~7.0.18",
-    "chai": "~3.5.0",
-    "mocha": "~3.2.0",
-    "nyc": "~11.0.3",
-    "rimraf": "~2.5.2",
-    "source-map-support": "0.5.9",
-    "ts-node": "~3.1.0",
-    "typescript": "~3.0.3"
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.6.8",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "rimraf": "^2.6.3",
+    "source-map-support": "^0.5.12",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
   },
   "nyc": {
     "extension": [
@@ -39,4 +39,3 @@
     ]
   }
 }
-
