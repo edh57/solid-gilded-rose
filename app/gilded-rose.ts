@@ -18,21 +18,20 @@ export class GenericQualityCalculator {
     adjustQuality(item: Item) {
 
         if (item.quality > 0) {
-            if (item.name != SULFURUS) {
+            item.quality = item.quality - 1
+        }
+        item.sellIn = item.sellIn - 1;
+        if (item.sellIn < 0) {
+            if (item.quality > 0) {
                 item.quality = item.quality - 1
             }
         }
-        if (item.name != SULFURUS) {
-            item.sellIn = item.sellIn - 1;
-        }
-        if (item.sellIn < 0) {
-            if (item.quality > 0) {
-                if (item.name != SULFURUS) {
-                    item.quality = item.quality - 1
-                }
-            }
+    }
+}
 
-        }
+export class SulfurusQualityCalculator implements IQualityCalculator {
+    adjustQuality(item: Item) {
+        // Do nothing
     }
 }
 
@@ -90,6 +89,8 @@ export class GildedRose {
                 qualityCalculator = new AgedBrieQualityCalculator();
             } else if (item.name === BACKSTAGE_PASS) {
                 qualityCalculator = new BackstagePassQualityCalculator();
+            } else if (item.name == SULFURUS) {
+                qualityCalculator = new SulfurusQualityCalculator();
             } else {
                 qualityCalculator = new GenericQualityCalculator();
             }
