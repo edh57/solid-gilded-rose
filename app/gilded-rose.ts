@@ -10,6 +10,58 @@ export class Item {
     }
 }
 
+export interface IQualityCalculator {
+    adjustQuality(item: Item);
+}
+
+export class GenericQualityCalculator {
+    adjustQuality(item: Item) {
+        if (item.name != AGED_BRIE && item.name != BACKSTAGE_PASS) {
+            if (item.quality > 0) {
+                if (item.name != SULFURUS) {
+                    item.quality = item.quality - 1
+                }
+            }
+        } else {
+            if (item.quality < 50) {
+                item.quality = item.quality + 1
+                if (item.name == BACKSTAGE_PASS) {
+                    if (item.sellIn < 11) {
+                        if (item.quality < 50) {
+                            item.quality = item.quality + 1
+                        }
+                    }
+                    if (item.sellIn < 6) {
+                        if (item.quality < 50) {
+                            item.quality = item.quality + 1
+                        }
+                    }
+                }
+            }
+        }
+        if (item.name != SULFURUS) {
+            item.sellIn = item.sellIn - 1;
+        }
+        if (item.sellIn < 0) {
+            if (item.name != AGED_BRIE) {
+                if (item.name != BACKSTAGE_PASS) {
+                    if (item.quality > 0) {
+                        if (item.name != SULFURUS) {
+                            item.quality = item.quality - 1
+                        }
+                    }
+                } else {
+                    item.quality = item.quality - item.quality
+                }
+            } else {
+                if (item.quality < 50) {
+                    item.quality = item.quality + 1
+                }
+            }
+        }
+    }
+}
+
 export const AGED_BRIE = 'Aged Brie';
 export const BACKSTAGE_PASS = 'Backstage passes to a TAFKAL80ETC concert';
 export const SULFURUS = 'Sulfuras, Hand of Ragnaros';
@@ -23,49 +75,8 @@ export class GildedRose {
 
     updateQuality() {
         for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].name != AGED_BRIE && this.items[i].name != BACKSTAGE_PASS) {
-                if (this.items[i].quality > 0) {
-                    if (this.items[i].name != SULFURUS) {
-                        this.items[i].quality = this.items[i].quality - 1
-                    }
-                }
-            } else {
-                if (this.items[i].quality < 50) {
-                    this.items[i].quality = this.items[i].quality + 1
-                    if (this.items[i].name == BACKSTAGE_PASS) {
-                        if (this.items[i].sellIn < 11) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
-                            }
-                        }
-                        if (this.items[i].sellIn < 6) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
-                            }
-                        }
-                    }
-                }
-            }
-            if (this.items[i].name != SULFURUS) {
-                this.items[i].sellIn = this.items[i].sellIn - 1;
-            }
-            if (this.items[i].sellIn < 0) {
-                if (this.items[i].name != AGED_BRIE) {
-                    if (this.items[i].name != BACKSTAGE_PASS) {
-                        if (this.items[i].quality > 0) {
-                            if (this.items[i].name != SULFURUS) {
-                                this.items[i].quality = this.items[i].quality - 1
-                            }
-                        }
-                    } else {
-                        this.items[i].quality = this.items[i].quality - this.items[i].quality
-                    }
-                } else {
-                    if (this.items[i].quality < 50) {
-                        this.items[i].quality = this.items[i].quality + 1
-                    }
-                }
-            }
+            const qualityCalculator = new GenericQualityCalculator();
+            qualityCalculator.adjustQuality(this.items[i]);
         }
 
         return this.items;

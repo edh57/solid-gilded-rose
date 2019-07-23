@@ -3,6 +3,25 @@
 This is my attempt at working through the Gilded Rose kata. Original Kata found at
 https://github.com/emilybache/GildedRose-Refactoring-Kata. Each step of my process will be a commit.
 
+*steps before refactoring* - Create enough tests based on the specification that cover all lines of
+existing code. This gives us a good "green" case to make sure we stay within. Any breaking tests should
+be indicators of changes in functionality.
+
+*first_refactor* - Simple refactor to take care of pulling repeated strings into variables. Not really
+solid, just something basic to get out of the way.
+
+*second_refactor* - The `GildedRose.updateQuality` is certainly the main target of the refactors. The method
+is itself very high in complexity, with multiple branches in multiple loops based on item names. Any additional
+names that are added to this will simply continue to increase the complexity, and changes to one item's rules
+could very well break other items. In this way, it violates the Dependency Inversion Principle in that it is
+tightly coupled with concretions of the "Item" class. My first attempt is going to be to create further Item
+types that know how to calculate their own quality. Part of my brain says this voilates the Single Responsibility
+Principle, but we'll get to that one.
+
+Hit the problem with that one, that I ended up having to use something other than an Item, and extending that in
+weird ways, which I did not like. So the SRP violation that was tickling my brain had me go a different direction,
+and create an sepearate class for analyzing the quality of an item.
+
 
 ## Gilded Rose Requirements Specification
 
