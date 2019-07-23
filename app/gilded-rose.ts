@@ -16,7 +16,7 @@ export interface IQualityCalculator {
 
 export class GenericQualityCalculator {
     adjustQuality(item: Item) {
-        if (item.name != AGED_BRIE && item.name != BACKSTAGE_PASS) {
+        if (item.name != BACKSTAGE_PASS) {
             if (item.quality > 0) {
                 if (item.name != SULFURUS) {
                     item.quality = item.quality - 1
@@ -43,20 +43,28 @@ export class GenericQualityCalculator {
             item.sellIn = item.sellIn - 1;
         }
         if (item.sellIn < 0) {
-            if (item.name != AGED_BRIE) {
-                if (item.name != BACKSTAGE_PASS) {
-                    if (item.quality > 0) {
-                        if (item.name != SULFURUS) {
-                            item.quality = item.quality - 1
-                        }
+            if (item.name != BACKSTAGE_PASS) {
+                if (item.quality > 0) {
+                    if (item.name != SULFURUS) {
+                        item.quality = item.quality - 1
                     }
-                } else {
-                    item.quality = item.quality - item.quality
                 }
             } else {
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1
-                }
+                item.quality = item.quality - item.quality
+            }
+        }
+    }
+}
+
+export class AgedBrieQualityCalculator implements IQualityCalculator {
+    adjustQuality(item: Item) {
+        if (item.quality < 50) {
+            item.quality = item.quality + 1;
+        }
+        item.sellIn = item.sellIn - 1;
+        if (item.sellIn < 0) {
+            if (item.quality < 50) {
+                item.quality = item.quality + 1
             }
         }
     }
@@ -74,10 +82,15 @@ export class GildedRose {
     }
 
     updateQuality() {
-        for (let i = 0; i < this.items.length; i++) {
-            const qualityCalculator = new GenericQualityCalculator();
-            qualityCalculator.adjustQuality(this.items[i]);
-        }
+        this.items.forEach(item => {
+            let qualityCalculator: IQualityCalculator;
+            if (item.name === AGED_BRIE) {
+                qualityCalculator = new AgedBrieQualityCalculator();
+            } else {
+                qualityCalculator = new GenericQualityCalculator();
+            }
+            qualityCalculator.adjustQuality(item);
+        });
 
         return this.items;
     }

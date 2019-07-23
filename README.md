@@ -22,6 +22,9 @@ Hit the problem with that one, that I ended up having to use something other tha
 weird ways, which I did not like. So the SRP violation that was tickling my brain had me go a different direction,
 and create an sepearate class for analyzing the quality of an item.
 
+Something I hadn't noticed, was that our code was also modifying the sellIn date with every iteration. Suppose I
+should have figured that out from some of the tests. Seems like an SRP violation there.
+
 
 ## Gilded Rose Requirements Specification
 
