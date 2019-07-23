@@ -16,42 +16,22 @@ export interface IQualityCalculator {
 
 export class GenericQualityCalculator {
     adjustQuality(item: Item) {
-        if (item.name != BACKSTAGE_PASS) {
-            if (item.quality > 0) {
-                if (item.name != SULFURUS) {
-                    item.quality = item.quality - 1
-                }
-            }
-        } else {
-            if (item.quality < 50) {
-                item.quality = item.quality + 1
-                if (item.name == BACKSTAGE_PASS) {
-                    if (item.sellIn < 11) {
-                        if (item.quality < 50) {
-                            item.quality = item.quality + 1
-                        }
-                    }
-                    if (item.sellIn < 6) {
-                        if (item.quality < 50) {
-                            item.quality = item.quality + 1
-                        }
-                    }
-                }
+
+        if (item.quality > 0) {
+            if (item.name != SULFURUS) {
+                item.quality = item.quality - 1
             }
         }
         if (item.name != SULFURUS) {
             item.sellIn = item.sellIn - 1;
         }
         if (item.sellIn < 0) {
-            if (item.name != BACKSTAGE_PASS) {
-                if (item.quality > 0) {
-                    if (item.name != SULFURUS) {
-                        item.quality = item.quality - 1
-                    }
+            if (item.quality > 0) {
+                if (item.name != SULFURUS) {
+                    item.quality = item.quality - 1
                 }
-            } else {
-                item.quality = item.quality - item.quality
             }
+
         }
     }
 }
@@ -66,6 +46,28 @@ export class AgedBrieQualityCalculator implements IQualityCalculator {
             if (item.quality < 50) {
                 item.quality = item.quality + 1
             }
+        }
+    }
+}
+
+export class BackstagePassQualityCalculator implements IQualityCalculator {
+    adjustQuality(item: Item) {
+        if (item.quality < 50) {
+            item.quality = item.quality + 1
+            if (item.sellIn < 11) {
+                if (item.quality < 50) {
+                    item.quality = item.quality + 1
+                }
+            }
+            if (item.sellIn < 6) {
+                if (item.quality < 50) {
+                    item.quality = item.quality + 1
+                }
+            }
+        }
+        item.sellIn = item.sellIn - 1;
+        if (item.sellIn < 0) {
+            item.quality = item.quality - item.quality
         }
     }
 }
@@ -86,6 +88,8 @@ export class GildedRose {
             let qualityCalculator: IQualityCalculator;
             if (item.name === AGED_BRIE) {
                 qualityCalculator = new AgedBrieQualityCalculator();
+            } else if (item.name === BACKSTAGE_PASS) {
+                qualityCalculator = new BackstagePassQualityCalculator();
             } else {
                 qualityCalculator = new GenericQualityCalculator();
             }
