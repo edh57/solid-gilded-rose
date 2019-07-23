@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { Item, GildedRose, AGED_BRIE, BACKSTAGE_PASS, SULFURUS } from '../app/gilded-rose';
+import { Item, AGED_BRIE, BACKSTAGE_PASS, SULFURUS } from '../app/item';
+import { GildedRose } from '../app/gilded-rose';
 
 describe('Gilded Rose', function () {
 
