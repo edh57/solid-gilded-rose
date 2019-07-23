@@ -1,5 +1,20 @@
-import { Item } from './item';
+import { Item, AGED_BRIE, BACKSTAGE_PASS, SULFURUS } from './item';
 
+
+export class QualityCalculatorFactory {
+  static getQualityCalculator(item: Item): IQualityCalculator {
+    switch (item.name) {
+      case AGED_BRIE:
+        return new AgedBrieQualityCalculator();
+      case BACKSTAGE_PASS:
+        return new BackstagePassQualityCalculator();
+      case SULFURUS:
+        return new SulfurusQualityCalculator();
+      default:
+        return new GenericQualityCalculator();
+    }
+  }
+}
 export interface IQualityCalculator {
   adjustQuality(item: Item);
 }

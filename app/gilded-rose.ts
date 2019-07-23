@@ -1,10 +1,7 @@
 import { Item, AGED_BRIE, BACKSTAGE_PASS, SULFURUS } from './item';
 import {
     IQualityCalculator,
-    AgedBrieQualityCalculator,
-    BackstagePassQualityCalculator,
-    GenericQualityCalculator,
-    SulfurusQualityCalculator
+    QualityCalculatorFactory
 } from './quality';
 
 export class GildedRose {
@@ -16,16 +13,7 @@ export class GildedRose {
 
     updateQuality() {
         this.items.forEach(item => {
-            let qualityCalculator: IQualityCalculator;
-            if (item.name === AGED_BRIE) {
-                qualityCalculator = new AgedBrieQualityCalculator();
-            } else if (item.name === BACKSTAGE_PASS) {
-                qualityCalculator = new BackstagePassQualityCalculator();
-            } else if (item.name == SULFURUS) {
-                qualityCalculator = new SulfurusQualityCalculator();
-            } else {
-                qualityCalculator = new GenericQualityCalculator();
-            }
+            const qualityCalculator = QualityCalculatorFactory.getQualityCalculator(item);
             qualityCalculator.adjustQuality(item);
         });
 
