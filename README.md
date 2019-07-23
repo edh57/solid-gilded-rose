@@ -25,6 +25,9 @@ and create an sepearate class for analyzing the quality of an item.
 Something I hadn't noticed, was that our code was also modifying the sellIn date with every iteration. Suppose I
 should have figured that out from some of the tests. Seems like an SRP violation there.
 
+Extracted all the item-type logic to their own QualityCalculator objects. Have a structure that looks like a factory
+in there, so I'll move that in the next refactor.
+
 
 ## Gilded Rose Requirements Specification
 
