@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Item, GildedRose } from '../app/gilded-rose';
+import { Item, GildedRose, AGED_BRIE, BACKSTAGE_PASS, SULFURUS } from '../app/gilded-rose';
 
 describe('Gilded Rose', function () {
 
@@ -13,38 +13,38 @@ describe('Gilded Rose', function () {
     });
 
     describe('Aged Brie', () => {
-        it('increases in quality the older it gets', () => itemTest(new Item('Aged Brie', 30, 5), 6));
-        it('increases even after sellIn', () => itemTest(new Item('Aged Brie', -2, 5), 7));
-        it('quality is never more than 50', () => itemTest(new Item('Aged Brie', 5, 50), 50));
+        it('increases in quality the older it gets', () => itemTest(new Item(AGED_BRIE, 30, 5), 6));
+        it('increases even after sellIn', () => itemTest(new Item(AGED_BRIE, -2, 5), 7));
+        it('quality is never more than 50', () => itemTest(new Item(AGED_BRIE, 5, 50), 50));
     });
 
     describe('Sulfuras', () => {
-        it('never decreases in quality', () => itemTest(new Item('Sulfuras, Hand of Ragnaros', 5, 45), 45));
-        it('never has to be sold', () => itemTest(new Item('Sulfuras, Hand of Ragnaros', 5, 45), 45, 5));
-        it('never has to be sold', () => itemTest(new Item('Sulfuras, Hand of Ragnaros', -1, 45), 45, -1));
+        it('never decreases in quality', () => itemTest(new Item(SULFURUS, 5, 45), 45));
+        it('never has to be sold', () => itemTest(new Item(SULFURUS, 5, 45), 45, 5));
+        it('never has to be sold', () => itemTest(new Item(SULFURUS, -1, 45), 45, -1));
     });
 
     describe('Backstage passes', () => {
         it('increases in quality the older it gets', () => {
-            itemTest(new Item('Backstage passes to a TAFKAL80ETC concert', 30, 5), 6);
+            itemTest(new Item(BACKSTAGE_PASS, 30, 5), 6);
         });
 
         it('cannot go higher than 50', () => {
-            itemTest(new Item('Backstage passes to a TAFKAL80ETC concert', 30, 50), 50);
-            itemTest(new Item('Backstage passes to a TAFKAL80ETC concert', 10, 50), 50);
-            itemTest(new Item('Backstage passes to a TAFKAL80ETC concert', 5, 50), 50);
+            itemTest(new Item(BACKSTAGE_PASS, 30, 50), 50);
+            itemTest(new Item(BACKSTAGE_PASS, 10, 50), 50);
+            itemTest(new Item(BACKSTAGE_PASS, 5, 50), 50);
         });
 
         it('increases by 2 when there are 10 days or less', () => {
-            itemTest(new Item('Backstage passes to a TAFKAL80ETC concert', 9, 5), 7);
+            itemTest(new Item(BACKSTAGE_PASS, 9, 5), 7);
         });
 
         it('increases by 3 when there are 5 days or less', () => {
-            itemTest(new Item('Backstage passes to a TAFKAL80ETC concert', 4, 5), 8);
+            itemTest(new Item(BACKSTAGE_PASS, 4, 5), 8);
         });
 
         it('drops to 0 after the concert', () => {
-            itemTest(new Item('Backstage passes to a TAFKAL80ETC concert', 0, 5), 0);
+            itemTest(new Item(BACKSTAGE_PASS, 0, 5), 0);
         });
     });
 });
