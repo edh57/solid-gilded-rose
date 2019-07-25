@@ -10,60 +10,85 @@ export class Item {
     }
 }
 
+class GenericItem {
+  item: Item;
+  constructor(item) { this.item = item; }
+
+  tick() {
+    this.updateSellIn(-1);
+
+    this.updateQuality(-1);
+
+    if (this.item.quality < 0)  this.item.quality = 0;
+    if (this.item.quality > 50) this.item.quality = 50;
+  }
+
+  updateSellIn(amount: number) {
+    this.item.sellIn += amount;
+    if (this.item.sellIn < 0) this.item.sellIn = 0;
+  }
+
+  updateQuality(amount: number) {
+    this.item.quality += amount;
+    if (this.item.sellIn === 0) this.item.quality += amount;
+  }
+}
+
+class AgedBrieItem extends GenericItem {
+  constructor(item) { super(item); }
+
+  updateQuality(amount: number) {
+    this.item.quality += Math.abs(amount);
+    if (this.item.sellIn === 0) this.item.quality += Math.abs(amount);
+  }
+}
+
+class SulfurasItem extends GenericItem {
+  constructor(item) { super(item); }
+  updateSellIn(amount: number) {}
+  updateQuality(amount: number) {}
+}
+
+class BackstagePass extends GenericItem {
+  constructor(item) { super(item); }
+
+  updateQuality(amount: number) {
+    if (this.item.sellIn === 0) {
+      this.item.quality = 0;
+    } else if (this.item.sellIn <= 5) {
+      this.item.quality += 3;
+    } else if (this.item.sellIn <= 10) {
+      this.item.quality += 2;
+    } else {
+      this.item.quality += 1;
+    }
+  }
+}
+
 export class GildedRose {
-    items: Array<Item>;
+  items: Array<Item>;
 
-    constructor(items = [] as Array<Item>) {
-        this.items = items;
+  constructor(items = [] as Array<Item>) {
+    this.items = items;
+  }
+
+  typeOfItem(item) {
+    if (/^Aged Brie/i.test(item.name)) {
+      return new AgedBrieItem(item);
+    } else if (/^Sulfuras/i.test(item.name)) {
+      return new SulfurasItem(item);
+    } else if (/^Backstage pass/i.test(item.name)) {
+      return new BackstagePass(item);
+    } else {
+      return new GenericItem(item);
+    }
+  }
+
+  updateQuality() {
+    for (let i = 0; i < this.items.length; i++) {
+      this.typeOfItem(this.items[i]).tick();
     }
 
-    updateQuality() {
-        for (let i = 0; i < this.items.length; i++) {
-            if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-                if (this.items[i].quality > 0) {
-                    if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                        this.items[i].quality = this.items[i].quality - 1
-                    }
-                }
-            } else {
-                if (this.items[i].quality < 50) {
-                    this.items[i].quality = this.items[i].quality + 1
-                    if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (this.items[i].sellIn < 11) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
-                            }
-                        }
-                        if (this.items[i].sellIn < 6) {
-                            if (this.items[i].quality < 50) {
-                                this.items[i].quality = this.items[i].quality + 1
-                            }
-                        }
-                    }
-                }
-            }
-            if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].sellIn = this.items[i].sellIn - 1;
-            }
-            if (this.items[i].sellIn < 0) {
-                if (this.items[i].name != 'Aged Brie') {
-                    if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-                        if (this.items[i].quality > 0) {
-                            if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                                this.items[i].quality = this.items[i].quality - 1
-                            }
-                        }
-                    } else {
-                        this.items[i].quality = this.items[i].quality - this.items[i].quality
-                    }
-                } else {
-                    if (this.items[i].quality < 50) {
-                        this.items[i].quality = this.items[i].quality + 1
-                    }
-                }
-            }
-        }
-
-        return this.items;
-    }
+    return this.items;
+  }
 }
