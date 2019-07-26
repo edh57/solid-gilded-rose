@@ -47,6 +47,10 @@ describe('Gilded Rose', function () {
             itemTest(new Item('Backstage passes to a TAFKAL80ETC concert', 0, 5), 0);
         });
     });
+
+    describe('Conjured items', () => {
+      it('Quality degrades twice as fast', () => itemTest(new Item('Conjured Mana Cake', 3, 6), 4));
+    });
 });
 
 function itemTest(item: Item, expectedQuality: Number, expectedSellIn? : Number) {

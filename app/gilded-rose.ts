@@ -65,6 +65,14 @@ class BackstagePass extends GenericItem {
   }
 }
 
+class ConjuredItem extends GenericItem {
+  constructor(item) { super(item); }
+
+  updateQuality(amount: number) {
+    this.item.quality = this.item.quality + amount + amount;
+  }
+}
+
 export class GildedRose {
   items: Array<Item>;
 
@@ -79,6 +87,8 @@ export class GildedRose {
       return new SulfurasItem(item);
     } else if (/^Backstage pass/i.test(item.name)) {
       return new BackstagePass(item);
+    } else if (/^Conjured/i.test(item.name)) {
+      return new ConjuredItem(item);
     } else {
       return new GenericItem(item);
     }
