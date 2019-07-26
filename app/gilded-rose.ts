@@ -1,26 +1,30 @@
 export class Item {
-    name: string;
-    sellIn: number;
-    quality: number;
+  name: string;
+  sellIn: number;
+  quality: number;
 
-    constructor(name, sellIn, quality) {
-        this.name = name;
-        this.sellIn = sellIn;
-        this.quality = quality;
-    }
+  constructor(name, sellIn, quality) {
+    this.name = name;
+    this.sellIn = sellIn;
+    this.quality = quality;
+  }
 }
 
 class GenericItem {
   item: Item;
-  constructor(item) { this.item = item; }
+  maxQuality: number;
+
+  constructor(item, maxQuality = 50) {
+    this.item = item;
+    this.maxQuality = maxQuality;
+  }
 
   tick() {
     this.updateSellIn(-1);
-
     this.updateQuality(-1);
 
     if (this.item.quality < 0)  this.item.quality = 0;
-    if (this.item.quality > 50) this.item.quality = 50;
+    if (this.item.quality > this.maxQuality) this.item.quality = this.maxQuality;
   }
 
   updateSellIn(amount: number) {
@@ -44,7 +48,7 @@ class AgedBrieItem extends GenericItem {
 }
 
 class SulfurasItem extends GenericItem {
-  constructor(item) { super(item); }
+  constructor(item) { super(item, 80); }
   updateSellIn(amount: number) {}
   updateQuality(amount: number) {}
 }

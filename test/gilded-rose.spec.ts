@@ -19,9 +19,9 @@ describe('Gilded Rose', function () {
     });
 
     describe('Sulfuras', () => {
-        it('never decreases in quality', () => itemTest(new Item('Sulfuras, Hand of Ragnaros', 5, 45), 45));
-        it('never has to be sold', () => itemTest(new Item('Sulfuras, Hand of Ragnaros', 5, 45), 45, 5));
-        it('never has to be sold', () => itemTest(new Item('Sulfuras, Hand of Ragnaros', -1, 45), 45, -1));
+        it('never decreases in quality', () => itemTest(new Item('Sulfuras, Hand of Ragnaros', 5, 80), 80));
+        it('never has to be sold', () => itemTest(new Item('Sulfuras, Hand of Ragnaros', 5, 80), 80, 5));
+        it('never has to be sold', () => itemTest(new Item('Sulfuras, Hand of Ragnaros', -1, 80), 80, -1));
     });
 
     describe('Backstage passes', () => {
