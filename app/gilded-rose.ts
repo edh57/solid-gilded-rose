@@ -1,106 +1,19 @@
-export class Item {
-  name: string;
-  sellIn: number;
-  quality: number;
-
-  constructor(name, sellIn, quality) {
-    this.name = name;
-    this.sellIn = sellIn;
-    this.quality = quality;
-  }
-}
-
-class GenericItem {
-  item: Item;
-  maxQuality: number;
-
-  constructor(item, maxQuality = 50) {
-    this.item = item;
-    this.maxQuality = maxQuality;
-  }
-
-  tick() {
-    this.updateSellIn(-1);
-    this.updateQuality(-1);
-
-    if (this.item.quality < 0)  this.item.quality = 0;
-    if (this.item.quality > this.maxQuality) this.item.quality = this.maxQuality;
-  }
-
-  updateSellIn(amount: number) {
-    this.item.sellIn += amount;
-    if (this.item.sellIn < 0) this.item.sellIn = 0;
-  }
-
-  updateQuality(amount: number) {
-    this.item.quality += amount;
-    if (this.item.sellIn === 0) this.item.quality += amount;
-  }
-}
-
-class AgedBrieItem extends GenericItem {
-  constructor(item) { super(item); }
-
-  updateQuality(amount: number) {
-    this.item.quality += Math.abs(amount);
-    if (this.item.sellIn === 0) this.item.quality += Math.abs(amount);
-  }
-}
-
-class SulfurasItem extends GenericItem {
-  constructor(item) { super(item, 80); }
-  updateSellIn(amount: number) {}
-  updateQuality(amount: number) {}
-}
-
-class BackstagePass extends GenericItem {
-  constructor(item) { super(item); }
-
-  updateQuality(amount: number) {
-    if (this.item.sellIn === 0) {
-      this.item.quality = 0;
-    } else if (this.item.sellIn <= 5) {
-      this.item.quality += 3;
-    } else if (this.item.sellIn <= 10) {
-      this.item.quality += 2;
-    } else {
-      this.item.quality += 1;
-    }
-  }
-}
-
-class ConjuredItem extends GenericItem {
-  constructor(item) { super(item); }
-
-  updateQuality(amount: number) {
-    this.item.quality = this.item.quality + amount + amount;
-  }
-}
+import { Item } from './Item';
+import { ItemSelection } from './ItemSelection';
 
 export class GildedRose {
   items: Array<Item>;
+  itemSelector: ItemSelection;
 
   constructor(items = [] as Array<Item>) {
     this.items = items;
-  }
-
-  typeOfItem(item) {
-    if (/^Aged Brie/i.test(item.name)) {
-      return new AgedBrieItem(item);
-    } else if (/^Sulfuras/i.test(item.name)) {
-      return new SulfurasItem(item);
-    } else if (/^Backstage pass/i.test(item.name)) {
-      return new BackstagePass(item);
-    } else if (/^Conjured/i.test(item.name)) {
-      return new ConjuredItem(item);
-    } else {
-      return new GenericItem(item);
-    }
+    this.itemSelector = new ItemSelection();
   }
 
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      this.typeOfItem(this.items[i]).tick();
+      const selectedItem = this.itemSelector.select(this.items[i].name, this.items[i]);
+      selectedItem.tick();
     }
 
     return this.items;
